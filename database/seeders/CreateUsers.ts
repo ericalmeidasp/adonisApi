@@ -8,11 +8,13 @@ export default class CreateUsersSeeder extends BaseSeeder {
       {
         email: 'admin@eric.com',
         password: 'secret',
+        name: 'Éric Almeida',
         role: 'admin',
       },
       {
         email: 'normal@eric.com',
         password: 'secret',
+        name: 'Éric Almeida',
         role: 'normal',
       },
     ])

@@ -9,9 +9,15 @@ export default class PostsController {
     return posts
   }
 
-  public async store({ request }: HttpContextContract) {
+  public async store({ request, auth }: HttpContextContract) {
     const data = await request.validate(PostStoreValidator)
-    const post = await Post.create(data)
+
+    const user = await auth.authenticate()
+
+    const post = await Post.create({ ...data, authorId: user.id })
+
+    await post.preload('author')
+
     return post
   }
 
@@ -28,6 +34,8 @@ export default class PostsController {
     post.merge(data)
 
     await post.save()
+
+    await post.preload('author')
 
     return post
   }
