@@ -1,10 +1,15 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Post from 'App/Models/Post'
+import { Post } from 'App/Models'
 import { PostStoreValidator, PostUpdateValidator } from 'App/Validators/Post'
 
 export default class PostsController {
-  public async index({}: HttpContextContract) {
-    const posts = await Post.all()
+  public async index({ request }: HttpContextContract) {
+    const page = request.input('page', 1)
+    const limit = 3
+
+    const posts = await Post.query().orderBy('id', 'desc').preload('author').paginate(page, limit)
+
+    posts.baseUrl('/posts')
 
     return posts
   }
